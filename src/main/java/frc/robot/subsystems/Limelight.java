@@ -29,40 +29,33 @@ public class Limelight extends SubsystemBase{
     
     public enum Pipeline {}
     
-    //Returns if target is spotted.
     public boolean isTargetSpotted() {
         return limelight.getEntry("tv").getDouble(0) == 1.0;
     }
 
-    //Finds target's X-Angle.
     public double targetXAngleFromCenter() {
         return limelight.getEntry("tx").getDouble(Double.NaN);
 
     }
 
-    //Finds target's Y-Angle
     public double targetYAngleFromCenter() {
         return limelight.getEntry("ty").getDouble(Double.NaN);
     }
 
-    //Amount of area target has on camera.
     public double targetArea() {
         return limelight.getEntry("ta").getDouble(Double.NaN);
     }
 
-    //Returns what mode the limelight is in.
     public double limelightPipeline() {
         return limelight.getEntry("getpipe").getDouble(-1);
     }
     
     public void setLedMode(int mode) {
-        // This assert will never fail unless the api changes
         limelight.getEntry("ledMode").setNumber(mode);
     }
 
     public void setDriverCamMode(boolean yes) {
         limelight.getEntry("ledMode").setNumber(yes ? 1 : 0 );
-        // ?: operater means if yes is true assign the value of 1 to result otherwise use value of 2
     }
 
     public void setPipeLine(int pipelineMode) {
@@ -70,7 +63,6 @@ public class Limelight extends SubsystemBase{
     }
 
     public void setStream(int streamMode) {
-        // This assert will never fail unless the api changes
         limelight.getEntry("stream").setNumber(streamMode);
     }
 
@@ -89,7 +81,6 @@ public class Limelight extends SubsystemBase{
         double targetHeight = 5;
         double cameraAngle = 0;
         double d = Math.abs((targetHeight-cameraHeight) / (Math.tan(Math.toRadians(cameraAngle+targetAngle))));
-        //The equation: d = (h2-h1) / tan(a1+a2)
         return d;
     }
 

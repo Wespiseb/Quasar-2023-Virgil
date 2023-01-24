@@ -25,33 +25,26 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 public class CommandSequences {
     
-    //generates a path via points
     public Command genratePath(SwerveSubsystem swerveSubsystem, List<Translation2d> midPoints, Pose2d endPoint) {
-        // 1. Create trajectory settings
         TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
                 AutoConstants.kMaxSpeedMetersPerSecond,
                 AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                         .setKinematics(DriveConstants.kDriveKinematics);
 
-        // 2. Generate trajectory
-        //Genrates trajectory need to feed start point, a sereris of inbtween points, and end point
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
                 midPoints,
                 endPoint,
                 trajectoryConfig);
 
-        // 3. Define PID controllers for tracking trajectory
         PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
         PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
         ProfiledPIDController thetaController = new ProfiledPIDController(
                 AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        // 4. Construct command to follow trajectory
         SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
                 trajectory,
-                //swerveSubsystm::getPose is same as () -> swerveSubsystem.getPose()
                 swerveSubsystem::getPose,
                 DriveConstants.kDriveKinematics,
                 xController,
@@ -60,8 +53,6 @@ public class CommandSequences {
                 swerveSubsystem::setModuleStates,
                 swerveSubsystem);
 
-        // 5. Add some init and wrap-up, and return everything
-        //creates a Command list that will reset the Odometry, then move the path, then stop
         return new SequentialCommandGroup(
                 new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
                 swerveControllerCommand,

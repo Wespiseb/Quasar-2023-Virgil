@@ -23,25 +23,21 @@ public class Intake extends SubsystemBase {
   }
 
   public void pushIntake() {
-    // Pushes intake out to grab cube or cone
     leftPistion.set(Value.kForward);
     rightPiston.set(Value.kForward);
   }
 
   public void retreactIntake() {
-    // Pulls intake in when not grabbing cone or cube
     leftPistion.set(Value.kReverse);
     rightPiston.set(Value.kReverse);
   }
 
   public void turnOffIntake() {
-    // Depressureizes the intake
     leftPistion.set(Value.kOff);
     rightPiston.set(Value.kOff);
   }
 
   public void toggleIntake() {
-    //Switiches from reverse to forward or vise versa
     leftPistion.toggle();
     rightPiston.toggle();
   }

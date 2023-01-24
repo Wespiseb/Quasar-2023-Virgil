@@ -31,16 +31,10 @@ public class RobotContainer {
   private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystickPort);
   private final XboxController xboxController = new XboxController(OIConstants.kXboxControllerPort);
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
   public RobotContainer() {
     configureButtonBindings();
 
-    // sets up the defalt command for the swerve subsystem. Defalut commands run if
-    // no other commands are set
-    // the () -> are lambda expressions.
-    // lambda is sending over a method
+    
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem,
         () -> -leftJoystick.getRawAxis(OIConstants.kDriverYAxis),
         () -> leftJoystick.getRawAxis(OIConstants.kDriverXAxis),
@@ -51,8 +45,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    // reseting button for IMU. Usefull for change field orentation forward
-    // direction
+    
     new JoystickButton(xboxController, 1).onTrue(new InstantCommand(() -> swerveSubsystem.zeroHeading()));
     new JoystickButton(xboxController, 2).onTrue(new InstantCommand(() -> swerveSubsystem.resetOdometry(new Pose2d())));
 

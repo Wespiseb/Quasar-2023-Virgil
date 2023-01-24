@@ -67,7 +67,6 @@ public class SwerveSubsystem extends SubsystemBase {
         trueAngleShuffleBoard = programmerBoard.add("Robot Angle", 0).getEntry();
 
 
-        //zeros heading after pigeon boots up
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
@@ -82,7 +81,6 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public double getHeading() {
-        //imu is backwards, so it is multiplied by negative one
         return -Math.IEEEremainder(gyro.getYaw(), 360);
     }
 
@@ -95,11 +93,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public double getTrueAngle() {
-        //Gets the true angle of the balancing platform if robot is at an angle on the platform.
         if ((getHeading() >= -45 && getHeading() <= 45) || getHeading() <= -135 || getHeading() >= 135) 
-            //Calculation for balancing near 0, 180, and -180 but is inaccurate at 90 and -90 degrees of Yaw.
             return (180/Math.PI)*Math.atan((1/(Math.cos(getHeading()/180*Math.PI)))*Math.tan(getRoll()/180*Math.PI));
-        //Alternate calculation for balancing near 90 and -90 but is inaccurate at 0, 180, and -180 degrees of Yaw.
         return (180/Math.PI)*Math.atan((1/(Math.cos(getHeading()/180*Math.PI+Math.PI/2)))*Math.tan(getPitch()/180*Math.PI));
     }
 
@@ -117,9 +112,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        //this method comes from the subsystem class we inherited. Runs constantly while robot is on
-
-        //changes heading and module states into an x,y corrordanite
         odometer.update(getRotation2d(), getModulePositions());
         headingShuffleBoard.setDouble(getHeading());
         odometerShuffleBoard.setString(getPose().getTranslation().toString());
@@ -144,9 +136,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        //if their speed is larger then the physical max speed, it reduces all speeds until they are smaller than physical max speed
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-        //sets the modules to desired states
         frontLeft.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);
@@ -161,7 +151,6 @@ public class SwerveSubsystem extends SubsystemBase {
         }
 
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-        //sets the modules to desired states
         frontLeft.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);
